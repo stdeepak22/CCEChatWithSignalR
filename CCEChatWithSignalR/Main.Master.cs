@@ -8,10 +8,11 @@ using System.Web.UI.WebControls;
 namespace CCEChatWithSignalR
 {
     public partial class Main : System.Web.UI.MasterPage
-    {        
+    {
+        public string HeadingName { get; set; }
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            
         }
     }
 }

@@ -3,27 +3,30 @@
     <title>Agent Page</title>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
-    <div id="Login">
-        enter user name : <asp:TextBox ID="username" placeholder="User Name" runat="server"></asp:TextBox>        
-        <input type="submit" value="Login" id="btnLogin"/>
-    </div>
-    <div id="chat" style="display: none">
-        <input type="button" id="StartChat" value="Connect To Customer"/>
-        <div id="innerChat">
-            <%=User.Identity.Name %>
-            <input type="text" id="msg" value="" placeholder="Chat Message" />
-            <input type="button" id="send" value="send" />
-            <input type="text" value="" id="CustomerId"/>
-            <ul id="message">
-            </ul>
-        </div>   
-    </div>   
+    <form id="form1" runat="server">               
+        <div id="Login">
+            enter user name : <asp:TextBox ID="username" placeholder="User Name" runat="server"></asp:TextBox> 
+            <asp:HiddenField runat="server" ID="connectionID"/>       
+            <input type="submit" value="Login" id="btnLogin"/>
+        </div>
+        <div id="chat" style="display: none">
+            <input type="button" id="StartChat" value="Connect To Customer"/>
+            <div id="innerChat">
+                <%=User.Identity.Name %>
+                <input type="text" id="msg" value="" placeholder="Chat Message" />
+                <input type="button" id="send" value="send" />
+                <input type="text" value="" id="CustomerId"/>
+                <ul id="message">
+                </ul>
+            </div>   
+        </div>
+    </form>   
 </asp:Content>
 <asp:Content ID="Scripts" ContentPlaceHolderID="FooterScripts" runat="server">
     <script>
         $(document).ready(function () {
             var chat = $.connection.chatHub;
-
+            
             chat.client.SendMsg1 = function (msg) {
                 $('#message').append('<li>' + msg + '</li>');
             };
@@ -37,8 +40,7 @@
             
 
 
-            if ('<%=isLoggedIn %>'.toUpperCase() == 'TRUE') {
-                $.connection.hub.qs = "name=<%=username.Text%>";
+            if ('<%=isLoggedIn %>'.toUpperCase() == 'TRUE') {                
                 $.connection.hub.start().done(function () {
                     chat.server.registerMeAsAgent();
                     $('#Login').fadeOut();
@@ -54,6 +56,15 @@
                             });
                         });
                     });
+                });
+                
+                var myEvent = window.attachEvent || window.addEventListener;
+                var chkevent = window.attachEvent ? 'onbeforeunload' : 'beforeunload'; /// make IE7, IE8 compatable
+
+                myEvent(chkevent, function (e) { // For >=IE7, Chrome, Firefox
+                    var confirmationMessage = ' ';  // a space
+                    (e || window.event).returnValue = confirmationMessage;
+                    return confirmationMessage;
                 });
             }
         });                

@@ -4,20 +4,22 @@
     <title>Agent Page</title>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
-    <div id="Login">
-        enter user name : <asp:TextBox ID="username" placeholder="User Name" runat="server"/>
-        <input type="submit" value="Login" id="btnLogin"/>
-    </div>
-    <div id="chat" style="display: none">
-        <input type="button" id="StartChat" value="Connect To Agent"/>
-        <div id="innerChat">            
-            <input type="text" id="msg" value="" placeholder="Chat Message" />
-            <input type="button" id="send" value="send" />
-            <input type="text" value="" id="AgentId"/>
-            <ul id="message">
-            </ul>   
+    <form id="form1" runat="server">               
+        <div id="Login">
+            enter user name : <asp:TextBox ID="username" placeholder="User Name" runat="server"/>
+            <input type="submit" value="Login" id="btnLogin"/>
         </div>
-    </div>   
+        <div id="chat" style="display: none">
+            <input type="button" id="StartChat" value="Connect To Agent"/>
+            <div id="innerChat">            
+                <input type="text" id="msg" value="" placeholder="Chat Message" />
+                <input type="button" id="send" value="send" />
+                <input type="text" value="" id="AgentId"/>
+                <ul id="message">
+                </ul>   
+            </div>
+        </div>   
+    </form>
 </asp:Content>
 <asp:Content ID="Scripts" ContentPlaceHolderID="FooterScripts" runat="server">
     <script>
@@ -50,8 +52,7 @@
                 $('#Login').fadeOut();
                 $('#chat').fadeIn();
                 $("#innerChat input").attr("disabled", true);
-                $("#StartChat").click(function () {
-                    $.connection.hub.qs = "name=<%=username.Text%>";
+                $("#StartChat").click(function () {                    
                     $.connection.hub.start().done(function () {
                         chat.server.registerMeAsCustomer();                        
                     });

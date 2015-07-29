@@ -23,7 +23,7 @@ namespace CCEChatWithSignalR
         }
 
         public void RegisterMeAsAgent()
-        {
+        {            
             Groups.Add(Context.ConnectionId, "Agent");
             Agent.Add(Context.ConnectionId);            
         }
@@ -53,6 +53,7 @@ namespace CCEChatWithSignalR
         {
             msg = dicNames[Context.ConnectionId] + ":" + msg;
             Clients.Client(connectionId).SendMsg1(msg);
+            //Clients.User(dicNames[connectionId]).SendMsg1(msg);
             Clients.Caller.SendMsg1(msg);
         }
 
@@ -60,7 +61,7 @@ namespace CCEChatWithSignalR
         {
             var result = base.OnConnected();
             Clients.Client(Context.ConnectionId).SendMsg1("My ID is - " + Context.ConnectionId);
-            dicNames.Add(Context.ConnectionId, Context.QueryString["name"]);
+            dicNames.Add(Context.ConnectionId, Context.User.Identity.Name);
             return result;
         }
 
